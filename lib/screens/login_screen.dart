@@ -3,6 +3,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
 
 class LoginScreen extends StatefulWidget {
+  static const routeName = '/login';
+
   @override
   _LoginScreenState createState() => _LoginScreenState();
 }
@@ -62,7 +64,7 @@ Padding backNavIcon(context) {
     child: InkWell(
       onTap: () => Navigator.pop(context),
       child: CircleAvatar(
-          backgroundColor: Colors.grey.shade300,
+          backgroundColor: Colors.white,
           child: Icon(
             Icons.arrow_back_sharp,
             color: Colors.blueGrey,
@@ -129,7 +131,7 @@ Hero buildHeroThumbnail(profileThumb) {
     child: Center(
       child: CircleAvatar(
         radius: 60.0,
-        backgroundImage: NetworkImage(profileThumb),
+        backgroundImage: AssetImage('assets/images/login-user.png'),
         backgroundColor: Colors.transparent,
       ),
     ),

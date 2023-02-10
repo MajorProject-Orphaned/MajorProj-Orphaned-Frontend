@@ -52,11 +52,7 @@ class HomePage extends StatelessWidget {
                 minWidth: double.infinity,
                 height: 60,
                 onPressed: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) => LoginScreen(),
-                    ),
-                  );
+                  Navigator.of(context).pushNamed(LoginScreen.routeName);
                 },
                 color: Theme.of(context).primaryColor,
                 shape: RoundedRectangleBorder(

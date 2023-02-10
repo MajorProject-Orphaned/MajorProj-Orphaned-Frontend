@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:orphaned/screens/login_screen.dart';
 import './screens/home_page.dart';
 import './widgets/app_drawer.dart';
 
@@ -29,6 +30,9 @@ class MyApp extends StatelessWidget {
       ),
       home: HomePage(),
       debugShowCheckedModeBanner: false,
+      routes: {
+        LoginScreen.routeName: (ctx) => LoginScreen(),
+      },
     );
   }
 }
