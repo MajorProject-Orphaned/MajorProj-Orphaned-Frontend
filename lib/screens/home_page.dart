@@ -70,7 +70,7 @@ class HomePage extends StatelessWidget {
                 minWidth: double.infinity,
                 height: 60,
                 onPressed: () {},
-                color: Colors.green,
+                color: Theme.of(context).accentColor,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(40),
                 ),

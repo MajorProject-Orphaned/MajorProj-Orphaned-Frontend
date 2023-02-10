@@ -29,30 +29,57 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 }
 
-const profileThumb = "https://image.flaticon.com/icons/png/512/891/891399.png";
-
-
 class LoginBody extends StatelessWidget {
-
   @override
   Widget build(BuildContext context) {
     return ListView(
       shrinkWrap: true,
       padding: const EdgeInsets.all(40.0),
       children: [
-        buildHeroThumbnail(profileThumb),
+        buildHeroThumbnail(),
         SizedBox(height: 20),
         buildTextLoginNow(),
         SizedBox(height: 20),
         buildRowCreateNew(),
         SizedBox(height: 20),
-        emailField,
+        TextField(
+          textCapitalization: TextCapitalization.words,
+          cursorColor: Colors.deepPurple,
+          keyboardType: TextInputType.emailAddress,
+          decoration: fieldDecoration(
+            Icon(CupertinoIcons.mail_solid),
+            'Email',
+          ),
+          style: TextStyle(
+            color: Colors.deepPurple,
+          ),
+        ),
         SizedBox(height: 20),
         passwordField,
         SizedBox(height: 40),
         buildRowForgotPassword(),
         SizedBox(height: 10),
-        buildLoginButton(),
+        ElevatedButton(
+          onPressed: () {},
+          style: ElevatedButton.styleFrom(
+            shape: new RoundedRectangleBorder(
+              borderRadius: new BorderRadius.circular(8.0),
+            ),
+          ),
+          child: Container(
+            padding: EdgeInsets.all(12),
+            width: double.infinity,
+            child: Center(
+              child: Text(
+                "Login",
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+          ),
+        ),
       ],
     );
   }
@@ -62,6 +89,7 @@ Padding backNavIcon(context) {
   return Padding(
     padding: const EdgeInsets.all(8.0),
     child: InkWell(
+      hoverColor: Colors.white,
       onTap: () => Navigator.pop(context),
       child: CircleAvatar(
           backgroundColor: Colors.white,
@@ -81,8 +109,6 @@ AppBar buildLoginAppBar(context) {
     actions: [],
   );
 }
-
-
 
 InputDecoration fieldDecoration(Icon icon, String fieldText) {
   return InputDecoration(
@@ -106,7 +132,7 @@ InputDecoration fieldDecoration(Icon icon, String fieldText) {
 final emailField = TextField(
   textCapitalization: TextCapitalization.words,
   style: TextStyle(color: Colors.deepPurple),
-  cursorColor: Colors.deepPurple,
+  cursorColor: Colors.blue,
   keyboardType: TextInputType.emailAddress,
   decoration: fieldDecoration(
     Icon(CupertinoIcons.mail_solid),
@@ -124,8 +150,7 @@ final passwordField = TextField(
   decoration: fieldDecoration(Icon(CupertinoIcons.lock_fill), 'Password'),
 );
 
-
-Hero buildHeroThumbnail(profileThumb) {
+Hero buildHeroThumbnail() {
   return Hero(
     tag: "userThumbnail",
     child: Center(
@@ -137,7 +162,6 @@ Hero buildHeroThumbnail(profileThumb) {
     ),
   );
 }
-
 
 ElevatedButton buildLoginButton() {
   return ElevatedButton(
@@ -180,7 +204,7 @@ Row buildRowForgotPassword() {
 
 Text buildRowCreateNew() {
   return Text(
-    'Welcome back.\nYou have been missed!',
+    'Welcome back.',
     style: TextStyle(
       fontSize: 25,
       fontWeight: FontWeight.normal,
