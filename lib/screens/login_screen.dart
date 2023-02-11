@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:animated_text_kit/animated_text_kit.dart';
+
+import '../utils/widgets.dart';
+
 
 class LoginScreen extends StatefulWidget {
   static const routeName = '/login';
@@ -12,9 +14,6 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
-    final deviceHeight = MediaQuery.of(context).size.height;
-    final deviceWidth = MediaQuery.of(context).size.width;
-    print('deviceWidth $deviceWidth and deviceHeight $deviceHeight');
     return GestureDetector(
       onTap: () {
         if (FocusScope.of(context).isFirstFocus) {
@@ -22,219 +21,76 @@ class _LoginScreenState extends State<LoginScreen> {
         }
       },
       child: Scaffold(
-          backgroundColor: Colors.white,
-          appBar: buildLoginAppBar(context),
-          body: LoginBody()),
-    );
-  }
-}
+        backgroundColor: Colors.white,
+        appBar: buildLoginAppBar(context),
+        body: ListView(
+          shrinkWrap: true,
+          padding: const EdgeInsets.all(40.0),
+          children: [
+            buildHeroThumbnail(),
+            SizedBox(height: 20),
+            buildTextLoginNow(),
+            SizedBox(height: 20),
+            buildRowCreateNew(),
+            SizedBox(height: 20),
 
-class LoginBody extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return ListView(
-      shrinkWrap: true,
-      padding: const EdgeInsets.all(40.0),
-      children: [
-        buildHeroThumbnail(),
-        SizedBox(height: 20),
-        buildTextLoginNow(),
-        SizedBox(height: 20),
-        buildRowCreateNew(),
-        SizedBox(height: 20),
-        TextField(
-          textCapitalization: TextCapitalization.words,
-          cursorColor: Colors.deepPurple,
-          keyboardType: TextInputType.emailAddress,
-          decoration: fieldDecoration(
-            Icon(CupertinoIcons.mail_solid),
-            'Email',
-          ),
-          style: TextStyle(
-            color: Colors.deepPurple,
-          ),
-        ),
-        SizedBox(height: 20),
-        passwordField,
-        SizedBox(height: 40),
-        buildRowForgotPassword(),
-        SizedBox(height: 10),
-        ElevatedButton(
-          onPressed: () {},
-          style: ElevatedButton.styleFrom(
-            shape: new RoundedRectangleBorder(
-              borderRadius: new BorderRadius.circular(8.0),
+            // email field
+            TextField(
+              textCapitalization: TextCapitalization.words,
+              cursorColor: Theme.of(context).primaryColor,
+              keyboardType: TextInputType.emailAddress,
+              decoration: fieldDecoration(
+                Icon(CupertinoIcons.mail_solid),
+                'Email',
+              ),
+              style: TextStyle(
+                color: Theme.of(context).primaryColor,
+              ),
             ),
-          ),
-          child: Container(
-            padding: EdgeInsets.all(12),
-            width: double.infinity,
-            child: Center(
-              child: Text(
-                "Login",
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
+            SizedBox(height: 20),
+
+            // password field
+            TextField(
+              textCapitalization: TextCapitalization.words,
+              style: TextStyle(color: Theme.of(context).primaryColor,),
+              autofocus: false,
+              obscureText: true,
+              keyboardType: TextInputType.visiblePassword,
+              cursorColor: Theme.of(context).primaryColor,
+              decoration: fieldDecoration(
+                Icon(CupertinoIcons.lock_fill),
+                'Password',
+              ),
+            ),
+            SizedBox(height: 40),
+            buildRowForgotPassword(),
+            SizedBox(height: 10),
+            ElevatedButton(
+              onPressed: () {
+                print('Login button pressed');
+              },
+              style: ElevatedButton.styleFrom(
+                shape: new RoundedRectangleBorder(
+                  borderRadius: new BorderRadius.circular(8.0),
+                ),
+              ),
+              child: Container(
+                padding: EdgeInsets.all(12),
+                width: double.infinity,
+                child: Center(
+                  child: Text(
+                    "Login",
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
                 ),
               ),
             ),
-          ),
+          ],
         ),
-      ],
+      ),
     );
   }
-}
-
-Padding backNavIcon(context) {
-  return Padding(
-    padding: const EdgeInsets.all(8.0),
-    child: InkWell(
-      hoverColor: Colors.white,
-      onTap: () => Navigator.pop(context),
-      child: CircleAvatar(
-          backgroundColor: Colors.white,
-          child: Icon(
-            Icons.arrow_back_sharp,
-            color: Colors.blueGrey,
-          )),
-    ),
-  );
-}
-
-AppBar buildLoginAppBar(context) {
-  return AppBar(
-    backgroundColor: Colors.white,
-    elevation: 0,
-    leading: backNavIcon(context),
-    actions: [],
-  );
-}
-
-InputDecoration fieldDecoration(Icon icon, String fieldText) {
-  return InputDecoration(
-    enabledBorder: OutlineInputBorder(
-      borderRadius: BorderRadius.all(Radius.circular(12.0)),
-      borderSide: BorderSide(color: Colors.grey.shade100, width: 1),
-    ),
-    focusedBorder: OutlineInputBorder(
-      borderRadius: BorderRadius.all(Radius.circular(32.0)),
-      borderSide: BorderSide(color: Colors.grey.shade100),
-    ),
-    alignLabelWithHint: true,
-    fillColor: Colors.grey.shade100,
-    filled: true,
-    hintText: fieldText,
-    hintStyle: TextStyle(color: Colors.deepPurple),
-    prefixIcon: icon,
-  );
-}
-
-final emailField = TextField(
-  textCapitalization: TextCapitalization.words,
-  style: TextStyle(color: Colors.deepPurple),
-  cursorColor: Colors.blue,
-  keyboardType: TextInputType.emailAddress,
-  decoration: fieldDecoration(
-    Icon(CupertinoIcons.mail_solid),
-    'Email',
-  ),
-);
-
-final passwordField = TextField(
-  textCapitalization: TextCapitalization.words,
-  style: TextStyle(color: Colors.deepPurple),
-  autofocus: false,
-  obscureText: true,
-  keyboardType: TextInputType.visiblePassword,
-  cursorColor: Colors.deepPurple,
-  decoration: fieldDecoration(Icon(CupertinoIcons.lock_fill), 'Password'),
-);
-
-Hero buildHeroThumbnail() {
-  return Hero(
-    tag: "userThumbnail",
-    child: Center(
-      child: CircleAvatar(
-        radius: 60.0,
-        backgroundImage: AssetImage('assets/images/login-user.png'),
-        backgroundColor: Colors.transparent,
-      ),
-    ),
-  );
-}
-
-ElevatedButton buildLoginButton() {
-  return ElevatedButton(
-      onPressed: () {},
-      style: ElevatedButton.styleFrom(
-        shape: new RoundedRectangleBorder(
-          borderRadius: new BorderRadius.circular(8.0),
-        ),
-      ),
-      child: Container(
-          padding: EdgeInsets.all(12),
-          width: double.infinity,
-          child: Center(
-              child: Text("Login",
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                  )))));
-}
-
-Row buildRowForgotPassword() {
-  return Row(
-    mainAxisAlignment: MainAxisAlignment.center,
-    children: [
-      Text("Don't have an account? ",
-          style: TextStyle(
-            fontSize: 12,
-            fontWeight: FontWeight.normal,
-          )),
-      Text(
-        'Register.',
-        style: TextStyle(
-          fontSize: 14,
-          fontWeight: FontWeight.bold,
-        ),
-      ),
-    ],
-  );
-}
-
-Text buildRowCreateNew() {
-  return Text(
-    'Welcome back.',
-    style: TextStyle(
-      fontSize: 25,
-      fontWeight: FontWeight.normal,
-    ),
-  );
-}
-
-SizedBox buildTextLoginNow() {
-  return SizedBox(
-    width: 250.0,
-    child: AnimatedTextKit(
-      repeatForever: true,
-      animatedTexts: [
-        TypewriterAnimatedText("Let's sign you in",
-            textStyle: TextStyle(
-                color: Colors.indigo,
-                fontWeight: FontWeight.bold,
-                fontSize: 35)),
-      ],
-      onTap: () {
-        print("Tap Event");
-      },
-    ),
-  );
-
-  //   Text(
-  //   "Let's sign you in.",
-  //   style: TextStyle(
-  //   fontSize: 25,
-  //   fontWeight: FontWeight.bold,
-  // ),
-  // );
 }

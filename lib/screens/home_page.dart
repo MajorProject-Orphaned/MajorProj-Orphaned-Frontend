@@ -22,7 +22,7 @@ class HomePage extends StatelessWidget {
                 children: [
                   Text(
                     "Welcome to ORPHANED!",
-                    textAlign: TextAlign.left,
+                    textAlign: TextAlign.center,
                     style: GoogleFonts.roboto(
                       textStyle: TextStyle(
                         fontWeight: FontWeight.bold,
@@ -63,7 +63,7 @@ class HomePage extends StatelessWidget {
                   style: TextStyle(
                       fontWeight: FontWeight.w600,
                       fontSize: 20,
-                      color: Colors.white70),
+                      color: Colors.white),
                 ),
               ),
               MaterialButton(
