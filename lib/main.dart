@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:orphaned/screens/login_screen.dart';
+import './screens/login_screen.dart';
+import './screens/signup_screen.dart';
 import './screens/home_page.dart';
 import './widgets/app_drawer.dart';
 
@@ -15,7 +16,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Orphaned',
       theme: ThemeData(
         primarySwatch: Colors.blue,
         primaryColor: Colors.blue,
@@ -25,6 +26,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       routes: {
         LoginScreen.routeName: (ctx) => LoginScreen(),
+        SignupScreen.routeName: (ctx) => SignupScreen(),
       },
     );
   }

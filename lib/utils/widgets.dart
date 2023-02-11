@@ -1,6 +1,9 @@
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/material.dart';
 
+import '../screens/login_screen.dart';
+import '../screens/signup_screen.dart';
+
 Padding backNavIcon(context) {
   return Padding(
     padding: const EdgeInsets.all(8.0),
@@ -45,42 +48,54 @@ InputDecoration fieldDecoration(Icon icon, String fieldText) {
   );
 }
 
-Hero buildHeroThumbnail() {
+Hero buildHeroThumbnail([bool isLogin = true]) {
   return Hero(
     tag: "userThumbnail",
     child: Center(
       child: CircleAvatar(
         radius: 60.0,
-        backgroundImage: AssetImage('assets/images/login-user.png'),
+        backgroundImage: isLogin
+            ? AssetImage('assets/images/login-user.png')
+            : AssetImage('assets/images/register-user.png'),
         backgroundColor: Colors.transparent,
       ),
     ),
   );
 }
 
-Row buildRowForgotPassword() {
+Row buildRowForgotPassword(BuildContext context, [bool isLogin = true]) {
   return Row(
     mainAxisAlignment: MainAxisAlignment.center,
     children: [
-      Text("Don't have an account? ",
+      Text(isLogin ? "Don't have an account? " : "Already have an account? ",
           style: TextStyle(
             fontSize: 12,
             fontWeight: FontWeight.normal,
           )),
-      Text(
-        'Register.',
-        style: TextStyle(
-          fontSize: 14,
-          fontWeight: FontWeight.bold,
+      GestureDetector(
+        onTap: () {
+          isLogin
+              ? Navigator.of(context)
+                  .pushReplacementNamed(SignupScreen.routeName)
+              : Navigator.of(context)
+                  .pushReplacementNamed(LoginScreen.routeName);
+        },
+        child: Text(
+          isLogin ? 'Register.' : 'Login.',
+          style: TextStyle(
+            fontSize: 14,
+            fontWeight: FontWeight.bold,
+          ),
         ),
       ),
     ],
   );
 }
 
-Text buildRowCreateNew() {
+Text buildRowCreateNew([bool isLogin = true]) {
   return Text(
-    'Welcome back.',
+    isLogin ?
+    'Welcome back.' : 'Create a new account.',
     style: TextStyle(
       fontSize: 25,
       fontWeight: FontWeight.normal,
@@ -88,14 +103,14 @@ Text buildRowCreateNew() {
   );
 }
 
-SizedBox buildTextLoginNow() {
+SizedBox buildTextLoginNow([bool isLogin = true]) {
   return SizedBox(
     width: 250.0,
     child: AnimatedTextKit(
       repeatForever: true,
       animatedTexts: [
         TypewriterAnimatedText(
-          "Let's sign you in",
+          isLogin ? "Let's sign you in" : "Let's sign you up",
           textStyle: TextStyle(
             color: Colors.blue,
             fontWeight: FontWeight.bold,

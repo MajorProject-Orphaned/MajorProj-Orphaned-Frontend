@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../screens/login_screen.dart';
+import '../screens/signup_screen.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -69,7 +70,9 @@ class HomePage extends StatelessWidget {
               MaterialButton(
                 minWidth: double.infinity,
                 height: 60,
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.of(context).pushNamed(SignupScreen.routeName);
+                },
                 color: Theme.of(context).accentColor,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(40),
