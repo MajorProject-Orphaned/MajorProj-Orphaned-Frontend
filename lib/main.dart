@@ -1,10 +1,15 @@
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
 import 'package:flutter/material.dart';
 import 'package:orphaned/screens/login_screen.dart';
 import './screens/home_page.dart';
 import './widgets/app_drawer.dart';
 
-
-void main() {
+void main() async {
+    WidgetsFlutterBinding.ensureInitialized(); 
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   runApp(const MyApp());
 }
 
