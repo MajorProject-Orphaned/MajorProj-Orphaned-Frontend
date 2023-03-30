@@ -4,14 +4,14 @@ import 'package:flutter/cupertino.dart';
 import '../utils/widgets.dart';
 
 
-class LoginScreen extends StatefulWidget {
-  static const routeName = '/login';
+class SignupScreen extends StatefulWidget {
+  static const routeName = '/signup';
 
   @override
-  _LoginScreenState createState() => _LoginScreenState();
+  _SignupScreenState createState() => _SignupScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _SignupScreenState extends State<SignupScreen> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -27,11 +27,11 @@ class _LoginScreenState extends State<LoginScreen> {
           shrinkWrap: true,
           padding: const EdgeInsets.all(40.0),
           children: [
-            buildHeroThumbnail(),
+            buildHeroThumbnail(false),
             SizedBox(height: 20),
-            buildTextLoginNow(),
+            buildTextLoginNow(false),
             SizedBox(height: 20),
-            buildRowCreateNew(),
+            buildRowCreateNew(false),
             SizedBox(height: 20),
 
             // email field
@@ -63,23 +63,39 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
             ),
             SizedBox(height: 40),
-            buildRowForgotPassword(context),
+
+            // confirm password field
+            TextField(
+              textCapitalization: TextCapitalization.words,
+              style: TextStyle(color: Theme.of(context).primaryColor,),
+              autofocus: false,
+              obscureText: true,
+              keyboardType: TextInputType.visiblePassword,
+              cursorColor: Theme.of(context).primaryColor,
+              decoration: fieldDecoration(
+                Icon(CupertinoIcons.lock_fill),
+                'Confirm Password',
+              ),
+            ),
+            SizedBox(height: 40),
+            buildRowForgotPassword(context, false),
             SizedBox(height: 40),
             ElevatedButton(
               onPressed: () {
-                print('Login button pressed');
+                print('Signup button pressed');
               },
               style: ElevatedButton.styleFrom(
                 shape: new RoundedRectangleBorder(
                   borderRadius: new BorderRadius.circular(8.0),
                 ),
+                backgroundColor: Theme.of(context).accentColor,
               ),
               child: Container(
                 padding: EdgeInsets.all(12),
                 width: double.infinity,
                 child: Center(
                   child: Text(
-                    "Login",
+                    "Signup",
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
