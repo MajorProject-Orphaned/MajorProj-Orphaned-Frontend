@@ -11,11 +11,10 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  runApp(const MyApp());
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
 
   // This widget is the root of your application.
   @override
@@ -27,9 +26,9 @@ class MyApp extends StatelessWidget {
         primaryColor: Colors.blue,
         accentColor: Colors.green,
       ),
-      home: HomePage(),
       debugShowCheckedModeBanner: false,
       routes: {
+        HomePage.routeName: (ctx) => HomePage(),
         LoginScreen.routeName: (ctx) => LoginScreen(),
         SignupScreen.routeName: (ctx) => SignupScreen(),
       },

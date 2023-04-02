@@ -4,8 +4,7 @@ import '../screens/login_screen.dart';
 import '../screens/signup_screen.dart';
 
 class HomePage extends StatelessWidget {
-  const HomePage({super.key});
-
+  static const routeName = '/';
   @override
   Widget build(BuildContext context) {
     return Scaffold(
