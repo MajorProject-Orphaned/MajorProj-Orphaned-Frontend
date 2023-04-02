@@ -59,6 +59,10 @@ class _SignupScreenState extends State<SignupScreen> {
     } on FirebaseAuthException catch (e) {
       var message = 'An error occurred, please check your credentials!';
 
+      if (e.message != null) {
+        message = e.message;
+      }
+      
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(message),
