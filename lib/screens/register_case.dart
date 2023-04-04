@@ -1,11 +1,14 @@
 import 'dart:io';
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import '../utils/widgets.dart';
 import '../widgets/app_drawer.dart';
+import './home_page.dart';
 
 class RegisterCaseScreen extends StatefulWidget {
   static const routeName = '/register-case';
@@ -22,18 +25,98 @@ class _RegisterCaseScreenState extends State<RegisterCaseScreen> {
   String _childParentName = '';
   String _childParentContact = '';
   String _childAddress = '';
-  int _childAge;
+  String _childAge;
   File _childImage;
   var _authInstance = FirebaseAuth.instance;
 
-    void _pickImage() async {
-    final pickedImageFile = await ImagePicker()
-        .pickImage(source: ImageSource.gallery);
-    
+  void _pickImage() async {
+    final pickedImageFile =
+        await ImagePicker().pickImage(source: ImageSource.gallery);
+
     setState(() {
       _childImage = File(pickedImageFile.path);
     });
+  }
 
+  Future<void> _submitForm() async {
+    final isValid = _formKey.currentState.validate();
+    FocusScope.of(context).unfocus();
+
+    if (_childImage == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Please pick an image.'),
+          backgroundColor: Theme.of(context).errorColor,
+        ),
+      );
+      return;
+    }
+
+    if (isValid) {
+      _formKey.currentState.save();
+
+      setState(() {
+        _isLoading = true;
+      });
+
+      try {
+        // upload image to firebase storage
+        final ref = FirebaseStorage.instance
+            .ref()
+            .child('case_images')
+            .child(Timestamp.now().seconds.toString() + '.jpg');
+
+        await ref.putFile(_childImage);
+
+        final url = await ref.getDownloadURL();
+
+        // use those values to send our auth request...
+        await FirebaseFirestore.instance.collection('cases').add({
+          'policeUserId': _auth.currentUser.uid,
+          'isClosed': false,
+          'isFound': false,
+          'childName': _childName,
+          'childParentName': _childParentName,
+          'childParentContact': _childParentContact,
+          'childAddress': _childAddress,
+          'childAge': _childAge,
+          'createdAt': Timestamp.now(),
+          'childImageUrl': url,
+        });
+        setState(() {
+          _isLoading = false;
+        });
+        Navigator.of(context).pushReplacementNamed(HomePage.routeName);
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Case registered successfully!'),
+            backgroundColor: Theme.of(context).accentColor,
+          ),
+        );
+      } on FirebaseAuthException catch (error) {
+        var message = 'An error occurred, please check your credentials!';
+
+        if (error.message != null) {
+          message = error.message;
+        }
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(message),
+            backgroundColor: Theme.of(context).errorColor,
+          ),
+        );
+
+        setState(() {
+          _isLoading = false;
+        });
+      } catch (error) {
+        print(error);
+        setState(() {
+          _isLoading = false;
+        });
+      }
+    }
   }
 
   @override
@@ -156,7 +239,7 @@ class _RegisterCaseScreenState extends State<RegisterCaseScreen> {
                   TextFormField(
                     key: const ValueKey('childAge'),
                     validator: (value) {
-                      if (value as int < 0 || value as int > 100) {
+                      if (value.isEmpty || value.length > 2) {
                         return 'Please enter a valid age.';
                       }
                       return null;
@@ -172,7 +255,7 @@ class _RegisterCaseScreenState extends State<RegisterCaseScreen> {
                       color: Theme.of(context).primaryColor,
                     ),
                     onSaved: (value) {
-                      _childAge = value as int;
+                      _childAge = value;
                     },
                   ),
 
@@ -181,7 +264,7 @@ class _RegisterCaseScreenState extends State<RegisterCaseScreen> {
                   TextFormField(
                     key: const ValueKey('childParentContact'),
                     validator: (value) {
-                      if (value.length != 10) {
+                      if (value.isEmpty || value.length != 10) {
                         return 'Please enter a valid contact number.';
                       }
                       return null;
@@ -215,11 +298,15 @@ class _RegisterCaseScreenState extends State<RegisterCaseScreen> {
                       SizedBox(width: 8),
                       ElevatedButton.icon(
                         onPressed: _pickImage,
-                        icon: const Icon(CupertinoIcons.add,),
-                        style: ButtonStyle(
-                          backgroundColor: MaterialStateProperty.all<Color>(Colors.green),
+                        icon: const Icon(
+                          CupertinoIcons.add,
                         ),
-                        label: const Text('Upload child image', style: TextStyle(fontSize: 15)),
+                        style: ButtonStyle(
+                          backgroundColor:
+                              MaterialStateProperty.all<Color>(Colors.green),
+                        ),
+                        label: const Text('Upload child image',
+                            style: TextStyle(fontSize: 15)),
                       ),
                     ],
                   ),
@@ -229,7 +316,7 @@ class _RegisterCaseScreenState extends State<RegisterCaseScreen> {
                   if (_isLoading) const CircularProgressIndicator(),
                   if (!_isLoading)
                     ElevatedButton(
-                      onPressed: () {},
+                      onPressed: _submitForm,
                       style: ElevatedButton.styleFrom(
                         shape: new RoundedRectangleBorder(
                           borderRadius: new BorderRadius.circular(8.0),
