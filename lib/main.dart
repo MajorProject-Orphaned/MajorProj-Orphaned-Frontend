@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import './screens/login_screen.dart';
 import './screens/signup_screen.dart';
 import './screens/home_page.dart';
+import './screens/register_case.dart';
 import './widgets/app_drawer.dart';
 
 void main() async {
@@ -31,6 +32,7 @@ class MyApp extends StatelessWidget {
         HomePage.routeName: (ctx) => HomePage(),
         LoginScreen.routeName: (ctx) => LoginScreen(),
         SignupScreen.routeName: (ctx) => SignupScreen(),
+        RegisterCaseScreen.routeName: (ctx) => RegisterCaseScreen(),
       },
     );
   }
