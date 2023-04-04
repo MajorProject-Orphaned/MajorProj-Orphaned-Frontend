@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class AppDrawer extends StatefulWidget {
   @override
@@ -6,6 +7,10 @@ class AppDrawer extends StatefulWidget {
 }
 
 class _AppDrawerState extends State<AppDrawer> {
+  Future<void> _signOut() async {
+    await FirebaseAuth.instance.signOut();
+  }
+
   @override
   Widget build(BuildContext context) {
     return startDrawer();
@@ -27,7 +32,8 @@ class _AppDrawerState extends State<AppDrawer> {
               children: <Widget>[
                 CircleAvatar(
                   radius: 48.0,
-                  backgroundImage: NetworkImage("https://www.w3schools.com/howto/img_avatar.png"),
+                  backgroundImage: NetworkImage(
+                      "https://www.w3schools.com/howto/img_avatar.png"),
                 ),
                 Padding(
                   padding: EdgeInsets.all(10.0),
@@ -92,9 +98,16 @@ class _AppDrawerState extends State<AppDrawer> {
         ),
       ),
       onTap: () {
-        setState(() {
-          Navigator.pop(context);
-        });
+        if (title == "Logout") {
+          _signOut();
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('Logged out!'),
+              backgroundColor: Theme.of(context).accentColor,
+            ),
+          );
+          Navigator.of(context).pushReplacementNamed('/');
+        }
       },
     );
   }
