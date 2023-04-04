@@ -3,6 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import '../screens/login_screen.dart';
 import '../screens/signup_screen.dart';
+import '../screens/register_case.dart';
 import '../widgets/app_drawer.dart';
 
 class HomePage extends StatelessWidget {
@@ -65,7 +66,7 @@ class HomePage extends StatelessWidget {
                 height: 60,
                 onPressed: () {
                   _authInstance.currentUser != null
-                      ? Navigator.of(context).pushNamed(LoginScreen.routeName)
+                      ? Navigator.of(context).pushNamed(RegisterCaseScreen.routeName)
                       : Navigator.of(context).pushNamed(LoginScreen.routeName);
                 },
                 color: Theme.of(context).primaryColor,
