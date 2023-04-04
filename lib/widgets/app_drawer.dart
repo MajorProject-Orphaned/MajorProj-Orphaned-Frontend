@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:orphaned/screens/home_page.dart';
+import 'package:orphaned/screens/register_case.dart';
 
 class AppDrawer extends StatefulWidget {
   @override
@@ -106,7 +108,11 @@ class _AppDrawerState extends State<AppDrawer> {
               backgroundColor: Theme.of(context).accentColor,
             ),
           );
-          Navigator.of(context).pushReplacementNamed('/');
+          Navigator.of(context).pushReplacementNamed(HomePage.routeName);
+        }
+
+        if (title == "Register FIR") {
+          Navigator.of(context).pushReplacementNamed(RegisterCaseScreen.routeName);
         }
       },
     );
