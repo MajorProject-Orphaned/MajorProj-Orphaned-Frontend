@@ -5,7 +5,6 @@ import './screens/login_screen.dart';
 import './screens/signup_screen.dart';
 import './screens/home_page.dart';
 import './screens/register_case.dart';
-import './widgets/app_drawer.dart';
 import './screens/Cases_screen.dart';
 
 void main() async {
