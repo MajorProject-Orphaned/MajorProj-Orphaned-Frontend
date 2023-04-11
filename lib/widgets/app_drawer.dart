@@ -4,6 +4,9 @@ import 'package:orphaned/screens/Cases_screen.dart';
 import 'package:orphaned/screens/home_page.dart';
 import 'package:orphaned/screens/register_case.dart';
 import '../utils/Database_manager.dart';
+import '../screens/case_detail_screen.dart';
+import '../screens/admin_screen.dart';
+
 
 class AppDrawer extends StatefulWidget {
   @override
@@ -57,6 +60,30 @@ class _AppDrawerState extends State<AppDrawer> {
           createDrawerListTiles(Icons.file_open, "Opened Cases"),
           createDrawerListTiles(Icons.close, "Closed Cases"),
           createDrawerListTiles(Icons.info, "Report Missing Child"),
+          ListTile(
+            leading: Icon(Icons.cases_rounded),
+            title: const Text("Case Details",
+                style: TextStyle(
+                  fontFamily: 'Roboto',
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16.0,
+                )),
+            onTap: () {
+              Navigator.of(context).pushNamed(CaseDetailScreen.routeName);
+            },
+          ),
+          ListTile(
+            leading: Icon(Icons.cases_rounded),
+            title: const Text("Admin Page",
+                style: TextStyle(
+                  fontFamily: 'Roboto',
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16.0,
+                )),
+            onTap: () {
+              Navigator.of(context).pushNamed(AdminScreen.routeName);
+            },
+          ),
           const Divider(),
           createDrawerListTiles(Icons.assessment, "Statistical Report"),
           createDrawerListTiles(Icons.logout, "Logout"),
@@ -116,6 +143,7 @@ class _AppDrawerState extends State<AppDrawer> {
         if (title == "Register FIR") {
           Navigator.of(context)
               .pushReplacementNamed(RegisterCaseScreen.routeName);
+
         }
         if (title == "Opened Cases") {
           Navigator.of(context)
@@ -124,6 +152,7 @@ class _AppDrawerState extends State<AppDrawer> {
         if (title == "Closed Cases") {
           Navigator.of(context)
               .pushNamed(Cases.routeName, arguments: {'is_open': false});
+
         }
       },
     );
