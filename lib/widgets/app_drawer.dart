@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-
-import '../screens/home_page.dart';
-import '../screens/register_case.dart';
+import 'package:orphaned/screens/Cases_screen.dart';
+import 'package:orphaned/screens/home_page.dart';
+import 'package:orphaned/screens/register_case.dart';
+import '../utils/Database_manager.dart';
 import '../screens/case_detail_screen.dart';
 import '../screens/admin_screen.dart';
+
 
 class AppDrawer extends StatefulWidget {
   @override
@@ -141,6 +143,16 @@ class _AppDrawerState extends State<AppDrawer> {
         if (title == "Register FIR") {
           Navigator.of(context)
               .pushReplacementNamed(RegisterCaseScreen.routeName);
+
+        }
+        if (title == "Opened Cases") {
+          Navigator.of(context)
+              .pushNamed(Cases.routeName, arguments: {'is_open': true});
+        }
+        if (title == "Closed Cases") {
+          Navigator.of(context)
+              .pushNamed(Cases.routeName, arguments: {'is_open': false});
+
         }
       },
     );
