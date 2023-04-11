@@ -1,12 +1,14 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 import 'package:flutter/material.dart';
+
 import './screens/login_screen.dart';
 import './screens/signup_screen.dart';
 import './screens/home_page.dart';
 import './screens/register_case.dart';
 import './widgets/app_drawer.dart';
 import './screens/Cases_screen.dart';
+import './screens/case_detail_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -35,6 +37,7 @@ class MyApp extends StatelessWidget {
         SignupScreen.routeName: (ctx) => SignupScreen(),
         RegisterCaseScreen.routeName: (ctx) => RegisterCaseScreen(),
         Cases.routeName: (ctx) => Cases(),
+        CaseDetailScreen.routeName: (ctx) => CaseDetailScreen()
       },
     );
   }
