@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import '../screens/home_page.dart';
 import '../screens/register_case.dart';
 import '../screens/case_detail_screen.dart';
+import '../screens/admin_screen.dart';
 
 class AppDrawer extends StatefulWidget {
   @override
@@ -66,7 +67,19 @@ class _AppDrawerState extends State<AppDrawer> {
                   fontSize: 16.0,
                 )),
             onTap: () {
-              Navigator.of(context).pushReplacementNamed(CaseDetailScreen.routeName);
+              Navigator.of(context).pushNamed(CaseDetailScreen.routeName);
+            },
+          ),
+          ListTile(
+            leading: Icon(Icons.cases_rounded),
+            title: const Text("Admin Page",
+                style: TextStyle(
+                  fontFamily: 'Roboto',
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16.0,
+                )),
+            onTap: () {
+              Navigator.of(context).pushNamed(AdminScreen.routeName);
             },
           ),
           const Divider(),

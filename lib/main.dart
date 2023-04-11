@@ -9,6 +9,7 @@ import './screens/register_case.dart';
 import './widgets/app_drawer.dart';
 import './screens/Cases_screen.dart';
 import './screens/case_detail_screen.dart';
+import './screens/admin_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -37,7 +38,8 @@ class MyApp extends StatelessWidget {
         SignupScreen.routeName: (ctx) => SignupScreen(),
         RegisterCaseScreen.routeName: (ctx) => RegisterCaseScreen(),
         Cases.routeName: (ctx) => Cases(),
-        CaseDetailScreen.routeName: (ctx) => CaseDetailScreen()
+        CaseDetailScreen.routeName: (ctx) => CaseDetailScreen(),
+        AdminScreen.routeName: (ctx) => AdminScreen()
       },
     );
   }
