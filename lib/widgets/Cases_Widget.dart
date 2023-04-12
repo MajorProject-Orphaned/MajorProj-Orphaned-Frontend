@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import '../widgets/app_drawer.dart';
+import '../screens/case_detail_screen.dart';
 
 class CasesWidget extends StatefulWidget {
   final bool isButtonPressed;
@@ -79,7 +80,7 @@ class _CasesWidgetState extends State<CasesWidget> {
                   ),
                   trailing: Icon(Icons.arrow_forward_ios),
                   onTap: () {
-                    // Screen to be done by Akshit CASE DETAIL SCREEN!!
+                    Navigator.of(context).pushNamed(CaseDetailScreen.routeName);
                   },
                   title: Text(
                     'Name: ${data['childName']}',
