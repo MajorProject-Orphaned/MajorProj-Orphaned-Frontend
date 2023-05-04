@@ -6,6 +6,7 @@ import 'package:orphaned/screens/register_case.dart';
 import '../utils/Database_manager.dart';
 import '../screens/case_detail_screen.dart';
 import '../screens/admin_screen.dart';
+import '../screens/update_profile_screen.dart';
 
 class AppDrawer extends StatefulWidget {
   @override
@@ -38,8 +39,7 @@ class _AppDrawerState extends State<AppDrawer> {
               children: <Widget>[
                 CircleAvatar(
                   radius: 48.0,
-                  backgroundImage: NetworkImage(
-                      "https://www.w3schools.com/howto/img_avatar.png"),
+                  backgroundImage: AssetImage('assets/images/profile_image.png'),
                 ),
                 Padding(
                   padding: EdgeInsets.all(10.0),
@@ -56,6 +56,7 @@ class _AppDrawerState extends State<AppDrawer> {
             ),
           ),
           createDrawerListTiles(Icons.app_registration, "Register FIR"),
+          createDrawerListTiles(Icons.person, "Update Profile"),
           createDrawerListTiles(Icons.file_open, "Opened Cases"),
           createDrawerListTiles(Icons.close, "Closed Cases"),
           createDrawerListTiles(Icons.info, "Report Missing Child"),
@@ -130,6 +131,9 @@ class _AppDrawerState extends State<AppDrawer> {
         }
         if (title == "Admin Page") {
           Navigator.of(context).pushNamed(AdminScreen.routeName);
+        }
+        if (title == "Update Profile") {
+          Navigator.of(context).pushNamed(UpdateProfileScreen.routeName);
         }
       },
     );
