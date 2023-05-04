@@ -1,24 +1,26 @@
 import 'package:flutter/material.dart';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
-
 import '../widgets/app_drawer.dart';
 
-class CaseDetailScreen extends StatelessWidget {
-  static const routeName = '/case_detail';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+
+class ProfilePage extends StatelessWidget {
+  const ProfilePage({Key key}) : super(key: key);
+
+  static const routeName = '/profile_page';
 
   @override
   Widget build(BuildContext context) {
-    final args = ModalRoute.of(context).settings.arguments as Map;
-    String caseId = args["case_id"];
-    CollectionReference cases = FirebaseFirestore.instance.collection('cases');
+    String userId = FirebaseAuth.instance.currentUser.uid;
+    CollectionReference users = FirebaseFirestore.instance.collection('users');
     return Scaffold(
       appBar: AppBar(
-        title: Text('Case Details'),
+        title: Text('Profile Page'),
       ),
       drawer: AppDrawer(),
       body: FutureBuilder<DocumentSnapshot>(
-        future: cases.doc(caseId).get(),
+        future: users.doc(userId).get(),
         builder:
             (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
           if (snapshot.hasError) {
@@ -43,7 +45,7 @@ class CaseDetailScreen extends StatelessWidget {
                           child: Container(
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(20),
-                              child: Image.network("${data['childImageUrl']}"),
+                              child: Image.network("${data['userImageUrl']}"),
                             ),
                           ),
                         ),
@@ -54,24 +56,20 @@ class CaseDetailScreen extends StatelessWidget {
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: [
                                 Text(
-                                  "Name : ${data['childName']}",
+                                  "Name : ${data['username']}",
                                   style: const TextStyle(
                                       fontWeight: FontWeight.bold,
                                       fontSize: 18),
                                 ),
                                 Text(
-                                  "Age : ${data['childAge']}",
+                                  "Age : ${data['userAge']}",
                                   style: TextStyle(fontSize: 15),
                                 ),
                                 Text(
-                                  "Father's Name : ${data['childFatherName']}",
+                                  "Contact : ${data['userContact']}",
                                 ),
                                 Text(
-                                  "Mother's Name : ${data['childMotherName']}",
-                                  style: TextStyle(fontSize: 15),
-                                ),
-                                Text(
-                                  "Address : ${data['childAddress']}",
+                                  "Address : ${data['userAddress']}",
                                   style: TextStyle(fontSize: 15),
                                 ),
                               ]),
