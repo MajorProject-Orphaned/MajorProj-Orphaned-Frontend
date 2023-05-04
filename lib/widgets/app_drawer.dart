@@ -7,6 +7,7 @@ import '../utils/Database_manager.dart';
 import '../screens/case_detail_screen.dart';
 import '../screens/admin_screen.dart';
 import '../screens/update_profile_screen.dart';
+import '../screens/profile_page.dart';
 
 class AppDrawer extends StatefulWidget {
   @override
@@ -37,9 +38,13 @@ class _AppDrawerState extends State<AppDrawer> {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                CircleAvatar(
-                  radius: 48.0,
-                  backgroundImage: AssetImage('assets/images/profile_image.png'),
+                GestureDetector(
+                  onTap: () => Navigator.of(context).pushNamed(ProfilePage.routeName),
+                  child: CircleAvatar(
+                    radius: 48.0,
+                    backgroundImage: NetworkImage(
+                        "https://www.w3schools.com/howto/img_avatar.png"),
+                  ),
                 ),
                 Padding(
                   padding: EdgeInsets.all(10.0),
