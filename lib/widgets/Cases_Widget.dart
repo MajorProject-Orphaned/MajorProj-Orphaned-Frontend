@@ -1,5 +1,7 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 import '../widgets/app_drawer.dart';
 import '../screens/case_detail_screen.dart';
 
@@ -80,7 +82,7 @@ class _CasesWidgetState extends State<CasesWidget> {
                   ),
                   trailing: Icon(Icons.arrow_forward_ios),
                   onTap: () {
-                    Navigator.of(context).pushNamed(CaseDetailScreen.routeName);
+                    Navigator.of(context).pushNamed(CaseDetailScreen.routeName, arguments: {'case_id': document.id});
                   },
                   title: Text(
                     'Name: ${data['childName']}',
