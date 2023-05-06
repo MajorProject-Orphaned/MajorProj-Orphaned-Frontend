@@ -3,11 +3,12 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:orphaned/screens/Cases_screen.dart';
 import 'package:orphaned/screens/home_page.dart';
 import 'package:orphaned/screens/register_case.dart';
-import '../utils/Database_manager.dart';
+import '../utils/data_processor.dart';
 import '../screens/case_detail_screen.dart';
 import '../screens/admin_screen.dart';
 import '../screens/update_profile_screen.dart';
 import '../screens/profile_page.dart';
+import '../screens/add_suspected_screen.dart';
 
 class AppDrawer extends StatefulWidget {
   @override
@@ -39,7 +40,8 @@ class _AppDrawerState extends State<AppDrawer> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 GestureDetector(
-                  onTap: () => Navigator.of(context).pushNamed(ProfilePage.routeName),
+                  onTap: () =>
+                      Navigator.of(context).pushNamed(ProfilePage.routeName),
                   child: CircleAvatar(
                     radius: 48.0,
                     backgroundImage: NetworkImage(
@@ -66,6 +68,7 @@ class _AppDrawerState extends State<AppDrawer> {
           createDrawerListTiles(Icons.close, "Closed Cases"),
           createDrawerListTiles(Icons.info, "Report Missing Child"),
           createDrawerListTiles(Icons.cases_rounded, "Admin Page"),
+          createDrawerListTiles(Icons.cases_rounded, "Add Suspected Child"),
           const Divider(),
           createDrawerListTiles(Icons.assessment, "Statistical Report"),
           createDrawerListTiles(Icons.logout, "Logout"),
@@ -139,6 +142,9 @@ class _AppDrawerState extends State<AppDrawer> {
         }
         if (title == "Update Profile") {
           Navigator.of(context).pushNamed(UpdateProfileScreen.routeName);
+        }
+        if (title == "Add Suspected Child") {
+          Navigator.of(context).pushNamed(AddSuspectedChild.routeName);
         }
       },
     );

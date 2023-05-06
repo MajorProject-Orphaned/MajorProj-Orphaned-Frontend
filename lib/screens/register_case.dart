@@ -3,6 +3,7 @@ import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -28,6 +29,7 @@ class _RegisterCaseScreenState extends State<RegisterCaseScreen> {
   String _childAge;
   File _childImage;
   var _authInstance = FirebaseAuth.instance;
+  FirebaseMessaging messaging = FirebaseMessaging.instance;
 
   void _pickImage() async {
     final pickedImageFile =
@@ -41,7 +43,7 @@ class _RegisterCaseScreenState extends State<RegisterCaseScreen> {
   Future<void> _submitForm() async {
     final isValid = _formKey.currentState.validate();
     FocusScope.of(context).unfocus();
-
+    String token = await FirebaseMessaging.instance.getAPNSToken();
     if (_childImage == null) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
@@ -82,6 +84,7 @@ class _RegisterCaseScreenState extends State<RegisterCaseScreen> {
           'childAge': _childAge,
           'createdAt': Timestamp.now(),
           'childImageUrl': url,
+          'token': token,
         });
         setState(() {
           _isLoading = false;

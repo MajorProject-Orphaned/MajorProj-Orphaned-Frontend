@@ -1,7 +1,8 @@
 import 'package:firebase_core/firebase_core.dart';
+import 'package:orphaned/screens/add_suspected_screen.dart';
 import 'firebase_options.dart';
 import 'package:flutter/material.dart';
-
+import './screens/add_suspected_screen.dart';
 import './screens/login_screen.dart';
 import './screens/signup_screen.dart';
 import './screens/home_page.dart';
@@ -43,6 +44,7 @@ class MyApp extends StatelessWidget {
         AdminScreen.routeName: (ctx) => AdminScreen(),
         UpdateProfileScreen.routeName: (ctx) => UpdateProfileScreen(),
         ProfilePage.routeName: (ctx) => ProfilePage(),
+        AddSuspectedChild.routeName: (ctx) => AddSuspectedChild(),
       },
     );
   }
