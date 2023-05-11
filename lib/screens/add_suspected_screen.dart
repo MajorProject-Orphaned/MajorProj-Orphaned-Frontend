@@ -84,6 +84,10 @@ class _AddSuspectedChildState extends State<AddSuspectedChild> {
         setState(() {
           _isLoading = false;
         });
+
+        final MyDataProcessor dataProcessor = MyDataProcessor();
+        await dataProcessor.processData(url);
+
         Navigator.of(context).pushReplacementNamed(HomePage.routeName);
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
@@ -91,9 +95,6 @@ class _AddSuspectedChildState extends State<AddSuspectedChild> {
             backgroundColor: Theme.of(context).accentColor,
           ),
         );
-
-        final MyDataProcessor dataProcessor = MyDataProcessor();
-        await dataProcessor.processData(url);
       } catch (error) {
         print(error);
         setState(() {

@@ -21,10 +21,9 @@ class MyDataProcessor {
 
 // If the images match, send a notification to the police officer who registered the case
       if (true) {
-        String policeOfficerToken = data['token'];
+        String policeUserId = data['policeUserId'];
         FcmMessaging fcmMessaging = FcmMessaging();
-        await fcmMessaging.sendNotification(policeOfficerToken, 'Match found',
-            'A match was found for the missing child.');
+        await fcmMessaging.sendPushMessage(policeUserId);
         return;
       }
     }
