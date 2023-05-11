@@ -1,5 +1,8 @@
+import 'dart:convert';
 import 'dart:io';
 import 'package:animated_text_kit/animated_text_kit.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -10,6 +13,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import '../utils/widgets.dart';
 import '../widgets/app_drawer.dart';
 import './home_page.dart';
+import 'package:http/http.dart' as http;
+import '../utils/fcm_messaging.dart';
 
 class RegisterCaseScreen extends StatefulWidget {
   static const routeName = '/register-case';
@@ -19,6 +24,8 @@ class RegisterCaseScreen extends StatefulWidget {
 }
 
 class _RegisterCaseScreenState extends State<RegisterCaseScreen> {
+  AndroidNotificationChannel channel;
+  FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
   var _isLoading = false;
   final _auth = FirebaseAuth.instance;
   final _formKey = GlobalKey<FormState>();
@@ -28,8 +35,10 @@ class _RegisterCaseScreenState extends State<RegisterCaseScreen> {
   String _childAddress = '';
   String _childAge;
   File _childImage;
+  String token = "";
   var _authInstance = FirebaseAuth.instance;
   FirebaseMessaging messaging = FirebaseMessaging.instance;
+  FcmMessaging fcmMessaging = FcmMessaging();
 
   void _pickImage() async {
     final pickedImageFile =
@@ -43,7 +52,7 @@ class _RegisterCaseScreenState extends State<RegisterCaseScreen> {
   Future<void> _submitForm() async {
     final isValid = _formKey.currentState.validate();
     FocusScope.of(context).unfocus();
-    String token = await FirebaseMessaging.instance.getAPNSToken();
+
     if (_childImage == null) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
@@ -71,6 +80,12 @@ class _RegisterCaseScreenState extends State<RegisterCaseScreen> {
         await ref.putFile(_childImage);
 
         final url = await ref.getDownloadURL();
+
+        // await FirebaseMessaging.instance.getToken().then((value) {
+        //   setState(() {
+        //     token = value;
+        //   });
+        // });
 
         // use those values to send our auth request...
         await FirebaseFirestore.instance.collection('cases').add({
@@ -120,6 +135,140 @@ class _RegisterCaseScreenState extends State<RegisterCaseScreen> {
         });
       }
     }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    requestPermission();
+
+    loadFCM();
+
+    listenFCM();
+
+    getToken();
+
+    FirebaseMessaging.instance.subscribeToTopic("${_auth.currentUser.uid}");
+  }
+
+  void requestPermission() async {
+    FirebaseMessaging messaging = FirebaseMessaging.instance;
+
+    NotificationSettings settings = await messaging.requestPermission(
+      alert: true,
+      announcement: false,
+      badge: true,
+      carPlay: false,
+      criticalAlert: false,
+      provisional: false,
+      sound: true,
+    );
+
+    if (settings.authorizationStatus == AuthorizationStatus.authorized) {
+      print('User granted permission');
+    } else if (settings.authorizationStatus ==
+        AuthorizationStatus.provisional) {
+      print('User granted provisional permission');
+    } else {
+      print('User declined or has not accepted permission');
+    }
+  }
+
+  void listenFCM() async {
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      RemoteNotification notification = message.notification;
+      AndroidNotification android = message.notification?.android;
+      if (notification != null && android != null && !kIsWeb) {
+        flutterLocalNotificationsPlugin.show(
+          notification.hashCode,
+          notification.title,
+          notification.body,
+          NotificationDetails(
+            android: AndroidNotificationDetails(
+              channel.id,
+              channel.name,
+              // TODO add a proper drawable resource to android, for now using
+              //      one that already exists in example app.
+              icon: 'launch_background',
+            ),
+          ),
+        );
+      }
+    });
+  }
+
+  void loadFCM() async {
+    if (!kIsWeb) {
+      channel = const AndroidNotificationChannel(
+        'high_importance_channel', // id
+        'High Importance Notifications', // title
+        importance: Importance.high,
+        enableVibration: true,
+      );
+
+      flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+
+      /// Create an Android Notification Channel.
+      ///
+      /// We use this channel in the `AndroidManifest.xml` file to override the
+      /// default FCM channel to enable heads up notifications.
+      await flutterLocalNotificationsPlugin
+          .resolvePlatformSpecificImplementation<
+              AndroidFlutterLocalNotificationsPlugin>()
+          ?.createNotificationChannel(channel);
+
+      /// Update the iOS foreground notification presentation options to allow
+      /// heads up notifications.
+      await FirebaseMessaging.instance
+          .setForegroundNotificationPresentationOptions(
+        alert: true,
+        badge: true,
+        sound: true,
+      );
+    }
+  }
+
+// This sendPushMessage here is for Testing here only do not remove it from here!!.
+
+  // void sendPushMessage(String token) async {
+  //   try {
+  //     http.post(
+  //       Uri.parse('https://fcm.googleapis.com/fcm/send'),
+  //       headers: <String, String>{
+  //         'Content-Type': 'application/json',
+  //         'Authorization':
+  //             'key=AAAACfEFCWo:APA91bGN1Wly0orEqfvV95z6MHQOo9jjD8VeeMM-xtRTQD4BHUy8B5agRH6QFkGXsjS5-258pHMqHE23oi8PCI-CxNSLnZ4K9gEzUFAWeGsyiQuGEeLcjh59AhDdKdgueYEsV52BY319'
+  //       },
+  //       body: jsonEncode(
+  //         <String, dynamic>{
+  //           'notification': <String, dynamic>{
+  //             'body': 'Test message',
+  //             'title': 'title'
+  //           },
+  //           'priority': 'high',
+  //           'data': <String, dynamic>{
+  //             'click_action': 'FLUTTER_NOTIFICATION_CLICK',
+  //             'id': '1',
+  //             'status': 'done'
+  //           },
+  //           "to": "/topics/${_auth.currentUser.uid}",
+  //         },
+  //       ),
+  //     );
+  //     print('Hello Send successfull');
+  //   } catch (e) {
+  //     print("error push notification");
+  //   }
+  // }
+
+  void getToken() async {
+    await FirebaseMessaging.instance.getToken().then((token) {
+      setState(() {
+        token = token;
+      });
+      print('token: ${token}');
+    });
   }
 
   @override
@@ -339,6 +488,30 @@ class _RegisterCaseScreenState extends State<RegisterCaseScreen> {
                         ),
                       ),
                     ),
+                  // For Testing Notifications
+                  // ElevatedButton(
+                  //   onPressed: () {
+                  //     sendPushMessage(token);
+                  //   },
+                  //   style: ElevatedButton.styleFrom(
+                  //     shape: new RoundedRectangleBorder(
+                  //       borderRadius: new BorderRadius.circular(8.0),
+                  //     ),
+                  //   ),
+                  //   child: Container(
+                  //     padding: EdgeInsets.all(12),
+                  //     width: double.infinity,
+                  //     child: Center(
+                  //       child: Text(
+                  //         "Notification",
+                  //         style: TextStyle(
+                  //           fontSize: 16,
+                  //           fontWeight: FontWeight.bold,
+                  //         ),
+                  //       ),
+                  //     ),
+                  //   ),
+                  // ),
                 ],
               ),
             ),
