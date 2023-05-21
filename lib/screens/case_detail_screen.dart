@@ -17,21 +17,24 @@ class CaseDetailScreen extends StatelessWidget {
         title: Text('Case Details'),
       ),
       drawer: AppDrawer(),
-      body: FutureBuilder<DocumentSnapshot>(
-        future: cases.doc(caseId).get(),
-        builder:
-            (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
-          if (snapshot.hasError) {
-            return Text("Something went wrong");
-          }
+      body: StreamBuilder<DocumentSnapshot>(
+          stream: cases.doc(caseId).snapshots(),
+          builder:
+              (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+            if (snapshot.hasError) {
+              return Text("Something went wrong");
+            }
 
-          if (snapshot.hasData && !snapshot.data.exists) {
-            return Text("Document does not exist");
-          }
+            if (snapshot.hasData && !snapshot.data.exists) {
+              return Text("Document does not exist");
+            }
 
-          if (snapshot.connectionState == ConnectionState.done) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return Text("Loading");
+            }
             Map<String, dynamic> data =
                 snapshot.data.data() as Map<String, dynamic>;
+            bool isOpen = !data['isClosed'];
             return Container(
               padding: EdgeInsets.all(20),
               child: Column(
@@ -77,6 +80,25 @@ class CaseDetailScreen extends StatelessWidget {
                               ]),
                         ),
                       ]),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Container(
+                          padding: EdgeInsets.all(20),
+                          decoration: BoxDecoration(
+                            color: Colors.greenAccent,
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(20))),
+                          child:
+                              isOpen ? Text("Case Open") : Text("Case Closed")),
+                      FilledButton(
+                          onPressed: () {
+                            cases.doc(caseId).update({'isClosed': isOpen}).then(
+                                (value) => print("status updatated"));
+                          },
+                          child: const Text('Change status')),
+                    ],
+                  ),
                   Divider(
                     height: 40,
                     thickness: 1.5,
@@ -135,11 +157,7 @@ class CaseDetailScreen extends StatelessWidget {
                 ],
               ),
             );
-          }
-
-          return Text("loading");
-        },
-      ),
+          }),
     );
   }
 }
