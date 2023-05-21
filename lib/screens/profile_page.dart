@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:orphaned/screens/update_profile_screen.dart';
 
 import '../widgets/app_drawer.dart';
 
@@ -17,6 +18,14 @@ class ProfilePage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text('Profile Page'),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.edit),
+            onPressed: () {
+              Navigator.of(context).pushNamed(UpdateProfileScreen.routeName);
+            },
+          ),
+        ],
       ),
       drawer: AppDrawer(),
       body: FutureBuilder<DocumentSnapshot>(
@@ -28,7 +37,7 @@ class ProfilePage extends StatelessWidget {
           }
 
           if (snapshot.hasData && !snapshot.data.exists) {
-            return Text("Document does not exist");
+            return Center(child: Text("Document does not exist"));
           }
 
           if (snapshot.connectionState == ConnectionState.done) {
@@ -49,31 +58,6 @@ class ProfilePage extends StatelessWidget {
                             ),
                           ),
                         ),
-                        Container(
-                          padding: EdgeInsets.all(10),
-                          height: 200,
-                          child: Column(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: [
-                                Text(
-                                  "Name : ${data['username']}",
-                                  style: const TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 18),
-                                ),
-                                Text(
-                                  "Age : ${data['userAge']}",
-                                  style: TextStyle(fontSize: 15),
-                                ),
-                                Text(
-                                  "Contact : ${data['userContact']}",
-                                ),
-                                Text(
-                                  "Address : ${data['userAddress']}",
-                                  style: TextStyle(fontSize: 15),
-                                ),
-                              ]),
-                        ),
                       ]),
                   Divider(
                     height: 40,
@@ -83,59 +67,44 @@ class ProfilePage extends StatelessWidget {
                   Container(
                     padding: EdgeInsets.fromLTRB(0, 0, 0, 20),
                     child: Text(
-                      'More Images',
+                      'Details',
                       style:
                           TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
                     ),
                   ),
                   Flexible(
-                    child: GridView(
-                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2,
-                          mainAxisSpacing: 5,
-                          crossAxisSpacing: 5),
-                      children: [
-                        ClipRRect(
-                          borderRadius: BorderRadius.circular(20),
-                          child: Image.asset('assets/images/cs.png'),
-                        ),
-                        ClipRRect(
-                          borderRadius: BorderRadius.circular(20),
-                          child: Image.asset('assets/images/cs.png'),
-                        ),
-                        ClipRRect(
-                          borderRadius: BorderRadius.circular(20),
-                          child: Image.asset('assets/images/cs.png'),
-                        ),
-                        ClipRRect(
-                          borderRadius: BorderRadius.circular(20),
-                          child: Image.asset('assets/images/cs.png'),
-                        ),
-                        ClipRRect(
-                          borderRadius: BorderRadius.circular(20),
-                          child: Image.asset('assets/images/cs.png'),
-                        ),
-                        ClipRRect(
-                          borderRadius: BorderRadius.circular(20),
-                          child: Image.asset('assets/images/cs.png'),
-                        ),
-                        ClipRRect(
-                          borderRadius: BorderRadius.circular(20),
-                          child: Image.asset('assets/images/cs.png'),
-                        ),
-                        ClipRRect(
-                          borderRadius: BorderRadius.circular(20),
-                          child: Image.asset('assets/images/cs.png'),
-                        ),
-                      ],
+                    child: Container(
+                      padding: EdgeInsets.all(10),
+                      height: 200,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          Text(
+                            "Name : ${data['userName']}",
+                            style: const TextStyle(
+                                fontWeight: FontWeight.bold, fontSize: 18),
+                          ),
+                          Text(
+                            "Contact : ${data['userContact']}",
+                          ),
+                          Text(
+                            "Address : ${data['userAddress']}",
+                            style: TextStyle(fontSize: 15),
+                          ),
+                          Text(
+                            "Is Police Officer : ${data['isPolice']}",
+                            style: TextStyle(fontSize: 15),
+                          ),
+                        ],
+                      ),
                     ),
-                  )
+                  ),
                 ],
               ),
             );
           }
 
-          return Text("loading");
+          return Center(child: Text("loading"));
         },
       ),
     );

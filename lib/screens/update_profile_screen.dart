@@ -78,21 +78,21 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
         if (isUserExists.docs.length > 0) {
           // update user profile
           await FirebaseFirestore.instance.collection('users').doc(isUserExists.docs[0].id).update({
-            'childName': _name,
-            'contact': _contact,
-            'address': _address,
-            'imageUrl': url,
+            'userName': _name,
+            'userContact': _contact,
+            'userAddress': _address,
+            'userImageUrl': url,
           });
         } 
         else {
-          await FirebaseFirestore.instance.collection('users').add({
+          await FirebaseFirestore.instance.collection('users').doc(_auth.currentUser.uid).set({
             'userId': _auth.currentUser.uid,
             'isPolice': _isPolice,
-            'childName': _name,
-            'contact': _contact,
-            'address': _address,
+            'userName': _name,
+            'userContact': _contact,
+            'userAddress': _address,
             'createdAt': Timestamp.now(),
-            'imageUrl': url,
+            'userImageUrl': url,
           });
         }
 
