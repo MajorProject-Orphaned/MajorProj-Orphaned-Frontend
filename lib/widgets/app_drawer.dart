@@ -29,9 +29,11 @@ class _AppDrawerState extends State<AppDrawer> {
   @override
   void initState() {
     super.initState();
-    _userData().then((value) => setState(() {
-          _data = value as Map<String, dynamic>;
-        }));
+    if (FirebaseAuth.instance.currentUser != null) {
+      _userData().then((value) => setState(() {
+            _data = value as Map<String, dynamic>;
+          }));
+    }
   }
 
   Future<void> _signOut() async {
@@ -60,7 +62,10 @@ class _AppDrawerState extends State<AppDrawer> {
                   child: CircleAvatar(
                     radius: 48.0,
                     backgroundImage: NetworkImage(
-                        _data != null ? _data['userImageUrl'] : "https://www.w3schools.com/howto/img_avatar.png",),
+                      _data != null
+                          ? _data['userImageUrl']
+                          : "https://www.w3schools.com/howto/img_avatar.png",
+                    ),
                   ),
                 ),
                 Padding(
@@ -77,14 +82,17 @@ class _AppDrawerState extends State<AppDrawer> {
               ],
             ),
           ),
-          createDrawerListTiles(Icons.app_registration, "Register FIR"),
-          createDrawerListTiles(Icons.file_open, "Opened Cases"),
-          createDrawerListTiles(Icons.close, "Closed Cases"),
-          createDrawerListTiles(Icons.info, "Report Missing Child"),
-          createDrawerListTiles(Icons.cases_rounded, "Admin Page"),
+          createDrawerListTiles(Icons.home, "Dashboard"),
+          if(_data != null && _data['isPolice'] == true)
+            createDrawerListTiles(Icons.app_registration, "Register FIR"),
+          if(_data != null && _data['isPolice'] == true)
+            createDrawerListTiles(Icons.file_open, "Opened Cases"),
+          if(_data != null && _data['isPolice'] == true)
+            createDrawerListTiles(Icons.close, "Closed Cases"),
+          if(FirebaseAuth.instance.currentUser.uid == '88O2i0s9h5RQU6ESBmDfN7uclrD3')
+            createDrawerListTiles(Icons.cases_rounded, "Admin Page"),
           createDrawerListTiles(Icons.cases_rounded, "Add Suspected Child"),
           const Divider(),
-          createDrawerListTiles(Icons.assessment, "Statistical Report"),
           createDrawerListTiles(Icons.logout, "Logout"),
         ],
       ),
@@ -138,7 +146,12 @@ class _AppDrawerState extends State<AppDrawer> {
           );
           Navigator.of(context).pushReplacementNamed(HomePage.routeName);
         }
-
+        if (title == "Dashboard") {
+          Navigator.of(context).pushReplacementNamed(HomePage.routeName);
+        }
+        if (title == "Admin Page") {
+          Navigator.of(context).pushReplacementNamed(AdminScreen.routeName);
+        }
         if (title == "Register FIR") {
           Navigator.of(context)
               .pushReplacementNamed(RegisterCaseScreen.routeName);
@@ -150,9 +163,6 @@ class _AppDrawerState extends State<AppDrawer> {
         if (title == "Closed Cases") {
           Navigator.of(context)
               .pushNamed(Cases.routeName, arguments: {'is_open': false});
-        }
-        if (title == "Admin Page") {
-          Navigator.of(context).pushNamed(AdminScreen.routeName);
         }
         if (title == "Add Suspected Child") {
           Navigator.of(context).pushNamed(AddSuspectedChild.routeName);
