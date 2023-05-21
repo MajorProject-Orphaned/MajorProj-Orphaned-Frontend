@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:orphaned/screens/home_page.dart';
+import 'package:orphaned/screens/update_profile_screen.dart';
 
 import '../utils/widgets.dart';
 
@@ -48,7 +49,7 @@ class _SignupScreenState extends State<SignupScreen> {
       setState(() {
         _isLoading = false;
       });
-      Navigator.of(context).pushReplacementNamed(HomePage.routeName);
+      Navigator.of(context).pushReplacementNamed(UpdateProfileScreen.routeName);
 
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
