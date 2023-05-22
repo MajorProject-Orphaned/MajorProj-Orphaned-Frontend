@@ -83,11 +83,11 @@ class _AppDrawerState extends State<AppDrawer> {
             ),
           ),
           createDrawerListTiles(Icons.home, "Dashboard"),
-          if(_data != null && _data['isPolice'] == true)
+          if(_data != null && _data['isPolice'] && _data['isVerified'] == true)
             createDrawerListTiles(Icons.app_registration, "Register FIR"),
-          if(_data != null && _data['isPolice'] == true)
+          if(_data != null && _data['isPolice'] && _data['isVerified'] == true)
             createDrawerListTiles(Icons.file_open, "Opened Cases"),
-          if(_data != null && _data['isPolice'] == true)
+          if(_data != null && _data['isPolice'] && _data['isVerified'] == true)
             createDrawerListTiles(Icons.close, "Closed Cases"),
           if(FirebaseAuth.instance.currentUser.uid == '88O2i0s9h5RQU6ESBmDfN7uclrD3')
             createDrawerListTiles(Icons.cases_rounded, "Admin Page"),
