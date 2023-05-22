@@ -88,6 +88,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
           await FirebaseFirestore.instance.collection('users').doc(_auth.currentUser.uid).set({
             'userId': _auth.currentUser.uid,
             'isPolice': _isPolice,
+            'isVerified': false,
             'userName': _name,
             'userContact': _contact,
             'userAddress': _address,

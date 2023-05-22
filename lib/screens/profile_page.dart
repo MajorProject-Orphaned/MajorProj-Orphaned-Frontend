@@ -91,10 +91,19 @@ class ProfilePage extends StatelessWidget {
                             "Address : ${data['userAddress']}",
                             style: TextStyle(fontSize: 15),
                           ),
-                          Text(
-                            "Is Police Officer : ${data['isPolice']}",
-                            style: TextStyle(fontSize: 15),
-                          ),
+                          if (data['isPolice']) ...[
+                            if (data['isVerified']) ...[
+                              const Text(
+                                "Verified as a Police Officer",
+                                style: TextStyle(fontSize: 15),
+                              )
+                            ] else ...[
+                              const Text(
+                                "Not yet verified as a Police Officer",
+                                style: TextStyle(fontSize: 15),
+                              )
+                            ]
+                          ]
                         ],
                       ),
                     ),
